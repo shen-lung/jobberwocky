@@ -15,6 +15,7 @@ const server = http.createServer(function(request, response) {
             const parsedData = JSON.parse(info)
             const data = parsedData.data
             if (parsedData.get) {
+                // Find the jobs
                 jobsPosted.forEach((job) => {
                     if (data.position.length !== 0) {
                         (job.jobType === data.jobType && job.position.includes(data.position)) && body.push(job)
@@ -23,6 +24,7 @@ const server = http.createServer(function(request, response) {
                     }
                 })
             } else {
+                // Store the jobs
                 jobsPosted.push(data)
             }
         })

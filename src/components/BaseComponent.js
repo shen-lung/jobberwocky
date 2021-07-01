@@ -15,6 +15,7 @@ import {
 import PostJobComponent from './PostJobComponent'
 import OpportunitiesComponent from './OpportunitiesComponent'
 
+// The content part of tabs
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -60,14 +61,21 @@ export default function BaseComponent() {
 
     const classes = useStyles();
     const [value, setValue] = useState(0);
+
+    // Get the suscribe switch value from localStorage
     const [switchValue, setSwitchValue] = useState(localStorage.getItem('suscribeValue') === 'true' );
     console.log(switchValue)
+
+    // Function to control the tab change
     const handleTabChange = (event, newValue) => {
       setValue(newValue);
     };
 
+    // Control the change of Suscribe switch
     const handleSwitchChange = () => {
         setSwitchValue(!switchValue)
+
+        // Save the suscribe switch value on localStorage
         localStorage.setItem('suscribeValue', !switchValue)
     }
     

@@ -28,11 +28,13 @@ export default function OpportunitiesComponent() {
         setJobType(event.target.value);
     };
 
+    // Return to default values
     const reset = () => {
         setJobType('Full time')
         setPosition('')
     }
     
+    // API call to find the job
     const handleFindJob = () => {
         findJobs({
             get: true,

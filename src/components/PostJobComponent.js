@@ -19,7 +19,7 @@ export default function PostJobComponent( props ) {
     PostJobComponent.propTypes = {
         switchSuscribeValue: PropTypes.bool
     };
-    
+
     const { switchSuscribeValue } = props
     const [jobType, setJobType] = useState('Full time');
     const [companyName, setCompanyName] = useState('');
@@ -47,6 +47,7 @@ export default function PostJobComponent( props ) {
         setJobDescription(event.target.value);
     };
 
+     // Return to default values
     const reset = () => {
         setJobType('Full time')
         setCompanyName('')
@@ -71,6 +72,9 @@ export default function PostJobComponent( props ) {
         .then(status => {
             console.log(status)
             console.log(switchSuscribeValue)
+
+            // We send the email if the status is 200 from the post job response
+            // and if suscribe value is True
             if (status === 200 && switchSuscribeValue) {
                 const message = `
                     Position: ${position}\n
