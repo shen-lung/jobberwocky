@@ -1,4 +1,4 @@
-import axios from 'axios'
+import React from 'react';
 
 export const publishJob = info => {
     let headers = new Headers();

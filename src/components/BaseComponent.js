@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
     Container,
@@ -8,6 +8,8 @@ import {
     Box,
     makeStyles,
     Grid,
+    FormControlLabel,
+    Switch,
 } from '@material-ui/core'
 
 import PostJobComponent from './PostJobComponent'
@@ -58,10 +60,16 @@ export default function BaseComponent() {
 
     const classes = useStyles();
     const [value, setValue] = useState(0);
-  
-    const handleChange = (event, newValue) => {
+    const [switchValue, setSwitchValue] = useState(localStorage.getItem('suscribeValue') === 'true' );
+    console.log(switchValue)
+    const handleTabChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    const handleSwitchChange = () => {
+        setSwitchValue(!switchValue)
+        localStorage.setItem('suscribeValue', !switchValue)
+    }
     
     return (
         <Container>
@@ -70,19 +78,32 @@ export default function BaseComponent() {
                     The World of Employment
                 </Typography>
             </Grid>
+            <Grid item xs={12} className="suscribe-section">
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={switchValue}
+                            onChange={handleSwitchChange}
+                            name="checkedB"
+                            color="primary"
+                        />
+                    }
+                    label="Subscribe for new jobs"
+                />
+            </Grid>
             <Grid item xs={12} className={classes.dataContent}>
                 <Tabs
                     orientation="vertical"
                     variant="scrollable"
                     value={value}
-                    onChange={handleChange}
+                    onChange={handleTabChange}
                     aria-label="Vertical tabs example"
                 >
                     <Tab label="Post jobs" {...a11yProps(0)} />
                     <Tab label="Opportunities" {...a11yProps(1)} />
                 </Tabs>
                 <TabPanel value={value} index={0} className="data-section">
-                    <PostJobComponent />
+                    <PostJobComponent switchSuscribeValue={switchValue} />
                 </TabPanel>
                 <TabPanel value={value} index={1} className="data-section">
                     <OpportunitiesComponent />

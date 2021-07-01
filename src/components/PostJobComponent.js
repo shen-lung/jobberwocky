@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { send } from 'emailjs-com'
+import PropTypes from 'prop-types';
 import {
     Grid,
     TextField,
@@ -13,7 +15,12 @@ import {
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { publishJob } from '../api/InternalJobService'
 
-export default function PostJobComponent() {
+export default function PostJobComponent( props ) {
+    PostJobComponent.propTypes = {
+        switchSuscribeValue: PropTypes.bool
+    };
+    
+    const { switchSuscribeValue } = props
     const [jobType, setJobType] = useState('Full time');
     const [companyName, setCompanyName] = useState('');
     const [position, setPosition] = useState('');
@@ -61,13 +68,43 @@ export default function PostJobComponent() {
                 jobDescription,
             }
         })
-        .then(data => {
-            console.log(data)
+        .then(status => {
+            console.log(status)
+            console.log(switchSuscribeValue)
+            if (status === 200 && switchSuscribeValue) {
+                const message = `
+                    Position: ${position}\n
+                    Company name: ${companyName}\n
+                    Place: ${place}\n
+                    Linkedin link: ${linkedinLink}\n
+                    Job type: ${jobType}\n
+                    Description: ${jobDescription}\n
+                `
+                const sendEmilContent = {
+                    from_name: 'The World of Employment',
+                    to_name: 'user',
+                    message,
+                    reply_to: '',
+                }
+
+                send(
+                    'service_6e0rink',
+                    'template_9l8r51b',
+                    sendEmilContent,
+                    'user_4Ib92tE0cGwpnnFRgIqJv',
+                )
+                .then((response) => {
+                    console.log('SUCCESS!', response.status, response.text);
+                })
+                .catch((err) => {
+                    console.log('FAILED...', err);
+                });
+            }
         })
 
         reset()
     }
-    
+
     return (
         <Grid item xs={12}>
             <Grid item xs={12}>
@@ -135,8 +172,8 @@ export default function PostJobComponent() {
                     id="job-description"
                     label="Job description"
                     multiline
-                    rows={14}
-                    rowsMax={14}
+                    rows={6}
+                    rowsMax={6}
                     variant="outlined"
                     onChange={handleJobDescription}
                     fullWidth
